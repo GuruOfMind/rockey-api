@@ -1,20 +1,29 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Enum
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import backref, relationship
+from sqlalchemy.sql.schema import Table
 
 from .enums import TypeEnum, MuscleEnum, EquipmentEnum
 from .database import Base
 
+class Alternative(Base):
+    __tablename__ = "alternatives"
+
+    exercise_id = Column("exerciseId", Integer, ForeignKey("exercises.id"), primary_key=True)
+    alternative_id = Column("alternativeId", Integer, ForeignKey("exercises.id"), primary_key=True)
 
 class Exercise(Base):
     __tablename__ = "exercises"
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
-    video = Column(String)
     instructions = Column(String, default="")
 
-    details = relationship("Detail", back_populates="exercise")
-    figures = relationship("Figure")
+    details = relationship("Detail", backref="details")
+    media = relationship("Media", backref="media")
+    alternatives = relationship("Exercise",
+                                secondary="alternatives",
+                                primaryjoin=id==Alternative.exercise_id,
+                                secondaryjoin=id==Alternative.alternative_id)
 
 class Detail(Base):
     __tablename__ = "details"
@@ -25,21 +34,15 @@ class Detail(Base):
     equipment = Column(Enum(EquipmentEnum))
     
     exercise_id = Column(Integer, ForeignKey("exercises.id"))
-    exercise = relationship("Exercise", back_populates="detail")
 
-class Figure(Base):
-    __tablename__ = "figures"
+class Media(Base):
+    __tablename__ = "media"
 
     id = Column(Integer, primary_key=True, index=True)
     figure_img = Column(String)
     figure_url = Column(String)
+    video = Column(String)
 
     exercise_id = Column(Integer, ForeignKey("exercises.id"))
-    exercise = relationship("Exercise", back_populates="figure")
-    # images_id = Column(Integer, ForeignKey("images.id"))
 
-class Alternative(Base):
-    __tablename__ = "alternatives"
 
-    exercise_id = Column(Integer, ForeignKey("exercise.id"))
-    alternative_exercise = Column(String)

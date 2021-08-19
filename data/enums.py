@@ -1,6 +1,5 @@
 import enum
 
-
 class TypeEnum(str, enum.Enum):
     Cardio          = 'Cardio'
     weightlifting   = 'Olympic Weightlifting'
