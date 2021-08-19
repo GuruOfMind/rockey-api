@@ -1,0 +1,45 @@
+import enum
+
+
+class TypeEnum(str, enum.Enum):
+    Cardio          = 'Cardio'
+    weightlifting   = 'Olympic Weightlifting'
+    Plyometrics     = 'Plyometrics'
+    Powerlifting    = 'Powerlifting'
+    Strength        = 'Strength'
+    Stretching      = 'Stretching'
+    Strongman       = 'Strongman'
+
+class EquipmentEnum(str, enum.Enum):
+    Bands           = 'Bands'
+    Barbell         = 'Barbell'
+    Body            = 'Body Only'
+    Cable           = 'Cable'
+    Dumbbell        = 'Dumbbell'
+    EZ_Curl_Bar     = 'E-Z Curl Bar'
+    Exercise_Ball   = 'Exercise Ball'
+    Foam_Roll       = 'Foam Roll'
+    Kettlebells     = 'Kettlebells'
+    Machine         = 'Machine'
+    Medicine_Ball   = 'Medicine Ball'
+    NOTHING         = 'Nothing'
+    Other           = 'Other'
+
+class MuscleEnum(str, enum.Enum):
+    Abdominals  = 'Abdominals'
+    Abductors   = 'Abductors'
+    Adductors   = 'Adductors'
+    Biceps      = 'Biceps'
+    Calves      = 'Calves'
+    Chest       = 'Chest'
+    Forearms    = 'Forearms'
+    Glutes      = 'Glutes'
+    Hamstrings  = 'Hamstrings'
+    Lats        = 'Lats'
+    Lower_Back  = 'Lower Back'
+    Middle_Back = 'Middle Back'
+    Neck        = 'Neck'
+    Quadriceps  = 'Quadriceps'
+    Shoulders   = 'Shoulders'
+    Traps       = 'Traps'
+    Triceps     = 'Triceps'
