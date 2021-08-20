@@ -10,6 +10,9 @@ class Alternative(Base):
 
     exercise_id = Column("exerciseId", Integer, ForeignKey("exercises.id"), primary_key=True)
     alternative_id = Column("alternativeId", Integer, ForeignKey("exercises.id"), primary_key=True)
+    exercise = relationship("Exercise", foreign_keys=[exercise_id])
+    alternative = relationship("Exercise", foreign_keys=[alternative_id], backref="alternative")
+
 
 class Exercise(Base):
     __tablename__ = "exercises"
@@ -23,7 +26,10 @@ class Exercise(Base):
     alternatives = relationship("Exercise",
                                 secondary="alternatives",
                                 primaryjoin=id==Alternative.exercise_id,
-                                secondaryjoin=id==Alternative.alternative_id)
+                                secondaryjoin=id==Alternative.alternative_id,
+                                )
+    def __repr__(self) -> str:
+        return "<Exercise %r>" % self.name
 
 class Detail(Base):
     __tablename__ = "details"
@@ -42,7 +48,5 @@ class Media(Base):
     figure_img = Column(String)
     figure_url = Column(String)
     video = Column(String)
-
+    
     exercise_id = Column(Integer, ForeignKey("exercises.id"))
-
-
