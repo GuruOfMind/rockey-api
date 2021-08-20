@@ -2,6 +2,7 @@ from data import enums
 from typing import List
 
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.responses import JSONResponse
 
 from sqlalchemy.orm.session import Session
 
@@ -29,7 +30,7 @@ def home():
             "message": "This API is for Exercises data"
         }
     }
-    return response
+    return JSONResponse(content=response)
 
 @app.get("/exercises", response_model=List[schemas.Exercise])
 async def get_exercises(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
