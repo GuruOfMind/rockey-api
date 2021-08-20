@@ -1,1 +1,1 @@
-web: gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app
+web: gunicorn main:app --max-requests 4 --worker-class 'uvicorn.workers.UvicornWorker'
