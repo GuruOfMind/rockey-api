@@ -23,12 +23,12 @@ def get_db():
 
 
 @app.get("/")
-async def home():
-    response = [
-        {
-            "error": "this api is private"
+def home():
+    response = {
+        "error":{
+            "message": "This API is for Exercises data"
         }
-    ]
+    }
     return response
 
 @app.get("/exercises", response_model=List[schemas.Exercise])
@@ -73,3 +73,5 @@ def get_exercises_by_equipment(exercise_equipment: enums.EquipmentEnum, db: Sess
         raise HTTPException(status_code=404, detail="Equipment not found")
     return response
 
+# if __name__ == "__main__":
+#     uvicorn.run(app, host)
