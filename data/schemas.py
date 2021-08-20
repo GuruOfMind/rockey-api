@@ -8,11 +8,11 @@ class Exercise(BaseModel):
     id: int
     name: str
     instructions: Optional[str] = ""
-
+    video: str
     details: ExerciseDetail
     media: List[ExerciseMedia] = []
 
-    alternatives: List[ExerciseAlternative] = []
+    alternatives: Optional[List[int]] = []
 
     class Config:
         orm_mode = True
@@ -28,7 +28,6 @@ class ExerciseDetail(BaseModel):
 class ExerciseMedia(BaseModel):
     figure_img: str
     figure_url: str
-    video: str
     
     class Config:
         orm_mode = True
@@ -43,6 +42,7 @@ class ExerciseCreate(BaseModel):
     id: int
     name: str
     instructions: Optional[str] = ""
+    video: str
 
     class Config:
         orm_mode = True
@@ -68,8 +68,7 @@ class Media(BaseModel):
         orm_mode = True
 
 class Alternative(BaseModel):
-    exercise_id: int
-    alternative_name: str
+    alternative_id: int
     
     class Config:
         orm_mode = True

@@ -1,18 +1,21 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Enum
+from sqlalchemy import Column, ForeignKey, Integer, String, Enum
 from sqlalchemy.orm import backref, relationship
-from sqlalchemy.sql.schema import Table
+from sqlalchemy.sql.schema import MetaData, Table
 
 from .enums import TypeEnum, MuscleEnum, EquipmentEnum
 from .database import Base
 
-class Alternative(Base):
-    __tablename__ = "alternatives"
+# class Alternative(Base):
+#     __tablename__ = "alternatives"
 
-    exercise_id = Column("exerciseId", Integer, ForeignKey("exercises.id"), primary_key=True)
-    alternative_id = Column("alternativeId", Integer, ForeignKey("exercises.id"), primary_key=True)
-    exercise = relationship("Exercise", foreign_keys=[exercise_id])
-    alternative = relationship("Exercise", foreign_keys=[alternative_id], backref="alternative")
+#     exercise_id = Column("exercise_id", Integer, ForeignKey("exercises.id"))
+#     alternative_id = Column("alternative_id", Integer, ForeignKey("exercises.id"))
 
+alternatives = Table("alternatives",
+                Base.metadata,
+                Column("exercise_id", Integer, ForeignKey("exercises.id")),
+                Column("alternative_id", Integer, ForeignKey("exercises.id"))
+                )
 
 class Exercise(Base):
     __tablename__ = "exercises"
@@ -20,16 +23,19 @@ class Exercise(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True, index=True)
     instructions = Column(String, default="")
+    video = Column(String)
 
     details = relationship("Detail", backref="details")
     media = relationship("Media", backref="media")
-    alternatives = relationship("Exercise",
-                                secondary="alternatives",
-                                primaryjoin=id==Alternative.exercise_id,
-                                secondaryjoin=id==Alternative.alternative_id,
-                                )
-    def __repr__(self) -> str:
-        return "<Exercise %r>" % self.name
+    alternative = relationship('Exercise',
+                                secondary=alternatives,
+                                primaryjoin=(alternatives.c.exercise_id == id),
+                                secondaryjoin=(alternatives.c.alternative_id == id),
+                                backref=backref("alternatives", lazy="joined"),
+                                lazy="joined"
+                                ) 
+    # def __repr__(self) -> str:
+    #     return "<Exercise %r>" % self.name
 
 class Detail(Base):
     __tablename__ = "details"
@@ -47,6 +53,5 @@ class Media(Base):
     id = Column(Integer, primary_key=True, index=True)
     figure_img = Column(String)
     figure_url = Column(String)
-    video = Column(String)
-    
+
     exercise_id = Column(Integer, ForeignKey("exercises.id"))

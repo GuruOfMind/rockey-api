@@ -1,5 +1,5 @@
 from data import enums
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from fastapi import FastAPI, Depends, HTTPException
 from pydantic import BaseModel
@@ -38,10 +38,28 @@ def get_exercise(exercise_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Exercise not found")
     return response
 
-@app.get("/types/{exercise_type}")
+@app.get("/types/{exercise_type}", response_model=List[schemas.Exercise])
 def get_exercises_by_type(exercise_type: enums.TypeEnum, db: Session = Depends(get_db)):
     response = crud.get_exercises_by_type(db=db, exercise_type=exercise_type)
     
     if response is None:
         raise HTTPException(status_code=404, detail="Exercise not found")
     return response
+
+
+@app.get("/muscles/{exercise_muscle}", response_model=List[schemas.Exercise])
+def get_exercises_by_muscle(exercise_muscle: enums.MuscleEnum, db: Session = Depends(get_db)):
+    response = crud.get_exercises_by_muscle(db=db, exercise_muscle=exercise_muscle)
+    
+    if response is None:
+        raise HTTPException(status_code=404, detail="Exercise not found")
+    return response
+
+@app.get("/equipment/{exercise_equipment}", response_model=List[schemas.Exercise])
+def get_exercises_by_equipment(exercise_equipment: enums.EquipmentEnum, db: Session = Depends(get_db)):
+    response = crud.get_exercises_by_equipment(db=db, exercise_equipment=exercise_equipment)
+    
+    if response is None:
+        raise HTTPException(status_code=404, detail="Equipment not found")
+    return response
+
