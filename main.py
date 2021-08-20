@@ -21,6 +21,16 @@ def get_db():
     finally:
         db.close()
 
+
+@app.get("/")
+async def home():
+    response = [
+        {
+            "error": "this api is private"
+        }
+    ]
+    return response
+
 @app.get("/exercises", response_model=List[schemas.Exercise])
 async def get_exercises(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     exercises = crud.get_exercises(db, skip=skip, limit=limit)
