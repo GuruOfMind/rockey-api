@@ -1,9 +1,11 @@
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.functions import mode
 
 from . import models, schemas, enums
 
 def get_exercise(db: Session, exercise_id: int):
-    return db.query(models.Exercise).filter(models.Exercise.id == exercise_id).first()
+    exercise_info = db.query(models.Exercise).filter(models.Exercise.id == exercise_id).first()
+    return exercise_info
 
 def get_exercise_id(db: Session, exercise_name: str):
     response = db.query(models.Exercise).filter(models.Exercise.name == exercise_name).first()
@@ -12,11 +14,13 @@ def get_exercise_id(db: Session, exercise_name: str):
 def get_exercises(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Exercise).offset(skip).limit(limit).all()
 
-def get_exercises_with_info(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Exercise).offset(skip).limit(limit).all()
-
 def get_exercises_by_type(db: Session, exercise_type: enums.TypeEnum , skip: int = 0, limit: int = 100):
-    return db.query(models.Exercise).filter(models.Exercise).offset(skip).limit(limit).all()
+    type_response = db.query(models.Exercise).join(models.Detail, models.Exercise.id == models.Detail.exercise_id).filter(models.Detail.type == exercise_type).all()
+    response = []
+
+    for item in type_response:
+        response.append(get_exercise(db=db, exercise_id=item.id))
+    return response
 
 def get_exercises_by_muscle(db: Session, exercise_muscle: enums.MuscleEnum, skip: int = 0, limit: int = 100):
     return db.query(models.Exercise).filter(models.Exercise).offset(skip).limit(limit).all()

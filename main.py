@@ -1,3 +1,4 @@
+from data import enums
 from typing import List, Optional
 
 from fastapi import FastAPI, Depends, HTTPException
@@ -27,14 +28,20 @@ async def get_exercises(skip: int = 0, limit: int = 100, db: Session = Depends(g
 
 @app.post("/exercises", response_model=schemas.ExerciseCreate)
 def create_exercise(exercise: schemas.ExerciseCreate, db: Session = Depends(get_db)):
-    return crud.create_exercise(db=db, exercise=exercise)
+    return crud.add_exercise(db=db, exercise=exercise)
 
-# @app.post("/exercises")
-# async def post_exercise(exercise: Exercise):
-#     return exercise
+@app.get("/exercises/{exercise_id}", response_model=schemas.Exercise)
+def get_exercise(exercise_id: int, db: Session = Depends(get_db)):
+    response = crud.get_exercise(db=db, exercise_id=exercise_id)
+    
+    if response is None:
+        raise HTTPException(status_code=404, detail="Exercise not found")
+    return response
 
-# @app.get("/exercises/{exercise_id}")
-# async def get_exercises_by_id(exercise_id: int):
-#     response = f"exercise By ID {exercise_id}"
-#     # exercise = Exercise({"name": "something"})
-#     return {response}
+@app.get("/types/{exercise_type}")
+def get_exercises_by_type(exercise_type: enums.TypeEnum, db: Session = Depends(get_db)):
+    response = crud.get_exercises_by_type(db=db, exercise_type=exercise_type)
+    
+    if response is None:
+        raise HTTPException(status_code=404, detail="Exercise not found")
+    return response

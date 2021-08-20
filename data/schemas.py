@@ -9,11 +9,33 @@ class Exercise(BaseModel):
     name: str
     instructions: Optional[str] = ""
 
-    details: Detail
-    figure: List[Media] = []
+    details: ExerciseDetail
+    media: List[ExerciseMedia] = []
 
-    alternatives: List[Exercise] = []
+    alternatives: List[ExerciseAlternative] = []
 
+    class Config:
+        orm_mode = True
+
+class ExerciseDetail(BaseModel):
+    type: TypeEnum = TypeEnum.Strongman
+    main_muscle: MuscleEnum = MuscleEnum.Chest
+    equipment: EquipmentEnum = EquipmentEnum.Other
+    
+    class Config:
+        orm_mode = True
+
+class ExerciseMedia(BaseModel):
+    figure_img: str
+    figure_url: str
+    video: str
+    
+    class Config:
+        orm_mode = True
+
+class ExerciseAlternative(BaseModel):
+    alternative_id: Optional[int] = None
+    
     class Config:
         orm_mode = True
 
