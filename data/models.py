@@ -1,15 +1,9 @@
 from sqlalchemy import Column, ForeignKey, Integer, String, Enum
 from sqlalchemy.orm import backref, relationship
-from sqlalchemy.sql.schema import MetaData, Table
+from sqlalchemy.sql.schema import Table
 
 from .enums import TypeEnum, MuscleEnum, EquipmentEnum
 from .database import Base
-
-# class Alternative(Base):
-#     __tablename__ = "alternatives"
-
-#     exercise_id = Column("exercise_id", Integer, ForeignKey("exercises.id"))
-#     alternative_id = Column("alternative_id", Integer, ForeignKey("exercises.id"))
 
 alternatives = Table("alternatives",
                 Base.metadata,

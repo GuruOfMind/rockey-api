@@ -1,8 +1,8 @@
 from data import enums
-from typing import List, Optional, Union
+from typing import List
 
 from fastapi import FastAPI, Depends, HTTPException
-from pydantic import BaseModel
+
 from sqlalchemy.orm.session import Session
 
 import data.crud as crud
