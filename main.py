@@ -75,5 +75,5 @@ def get_exercises_by_equipment(exercise_equipment: enums.EquipmentEnum, db: Sess
         raise HTTPException(status_code=404, detail="Equipment not found")
     return response
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=5000)
