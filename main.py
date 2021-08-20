@@ -1,15 +1,6 @@
-from typing import List
 
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-
-from sqlalchemy.orm.session import Session
-
-# from data import enums
-# import data.crud as crud
-# import data.models as models
-# import data.schemas as schemas
-# from data.database import SessionLocal, engine
 
 # models.Base.metadata.create_all(bind=engine)
 app = FastAPI()
