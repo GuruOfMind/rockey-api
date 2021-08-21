@@ -1,6 +1,8 @@
 from sqlalchemy.orm import Session
 
-from . import models, schemas, enums
+from src.models import models
+from src.schemas import schemas
+from src.utils import enums
 
 '''
     Create Objects
@@ -45,8 +47,6 @@ def add_alternative(db: Session, alternative: schemas.Alternative):
 '''
     Read Objects
 '''
-
-
 def get_exercises(db: Session, skip: int = 0, limit: int = 100):
     exercise_set = db.query(models.Exercise).offset(skip).limit(limit).all()
     response = []

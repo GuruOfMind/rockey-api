@@ -2,8 +2,8 @@ from sqlalchemy import Column, ForeignKey, Integer, String, Enum
 from sqlalchemy.orm import backref, relationship
 from sqlalchemy.sql.schema import Table
 
-from .enums import TypeEnum, MuscleEnum, EquipmentEnum
-from .database import Base
+from src.utils.enums import TypeEnum, MuscleEnum, EquipmentEnum
+from src.database.database import Base
 
 alternatives = Table("alternatives",
                 Base.metadata,

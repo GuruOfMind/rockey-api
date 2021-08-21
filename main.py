@@ -1,66 +1,40 @@
-
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import JSONResponse
+
+from src import config
+from src.routes import exercises as exercises_router
+from src.database.database import engine
+import src.models as models 
+
 
 # models.Base.metadata.create_all(bind=engine)
-app = FastAPI()
 
-# Dependency
-# def get_db():
-#     db = SessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
+app = FastAPI(
+    title=f"API for {config.SERVICE_NAME}",
+    description="visit <URL>/docs for documentation"
+)
 
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(exercises_router.router)
 
 @app.get("/")
-def home():
+async def home():
     response = {
         "error":{
-            "message": "This API is for Exercises data"
+            "message": f"This API is for Exercises data, {config.SERVICE_NAME}."
         }
     }
+    print("____________________________________________")
+    print(config.BASE_DIR)
+    print("____________________________________________")
     return JSONResponse(content=response)
-
-# @app.get("/exercises", response_model=List[schemas.Exercise])
-# async def get_exercises(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-#     exercises = crud.get_exercises(db, skip=skip, limit=limit)
-#     return exercises
-
-# @app.post("/exercises", response_model=schemas.ExerciseCreate)
-# async def create_exercise(exercise: schemas.ExerciseCreate, db: Session = Depends(get_db)):
-#     return crud.add_exercise(db=db, exercise=exercise)
-
-# @app.get("/exercises/{exercise_id}", response_model=schemas.Exercise)
-# async def get_exercise(exercise_id: int, db: Session = Depends(get_db)):
-#     response = crud.get_exercise(db=db, exercise_id=exercise_id)
-    
-#     if response is None:
-#         raise HTTPException(status_code=404, detail="Exercise not found")
-#     return response
-
-# @app.get("/types/{exercise_type}", response_model=List[schemas.Exercise])
-# async def get_exercises_by_type(exercise_type: enums.TypeEnum, db: Session = Depends(get_db)):
-#     response = crud.get_exercises_by_type(db=db, exercise_type=exercise_type)
-    
-#     if response is None:
-#         raise HTTPException(status_code=404, detail="Exercise not found")
-#     return response
-
-
-# @app.get("/muscles/{exercise_muscle}", response_model=List[schemas.Exercise])
-# async def get_exercises_by_muscle(exercise_muscle: enums.MuscleEnum, db: Session = Depends(get_db)):
-#     response = crud.get_exercises_by_muscle(db=db, exercise_muscle=exercise_muscle)
-    
-#     if response is None:
-#         raise HTTPException(status_code=404, detail="Exercise not found")
-#     return response
-
-# @app.get("/equipment/{exercise_equipment}", response_model=List[schemas.Exercise])
-# async def get_exercises_by_equipment(exercise_equipment: enums.EquipmentEnum, db: Session = Depends(get_db)):
-#     response = crud.get_exercises_by_equipment(db=db, exercise_equipment=exercise_equipment)
-    
-#     if response is None:
-#         raise HTTPException(status_code=404, detail="Equipment not found")
-#     return response

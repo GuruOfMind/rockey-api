@@ -1,1 +1,1 @@
-web: gunicorn main:app --max-requests 4 --worker-class 'uvicorn.workers.UvicornWorker'
+web: uvicorn main:app --host=0.0.0.0 --port=${PORT:-5000}

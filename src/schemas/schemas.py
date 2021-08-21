@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import List, Optional
-from .enums import TypeEnum, MuscleEnum, EquipmentEnum
+from src.utils.enums import TypeEnum, MuscleEnum, EquipmentEnum
 
 from pydantic import BaseModel
 
